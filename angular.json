@@ -119,6 +119,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "cmail"
+    }
+  },
+  "defaultProject": "cmail",
+  "cli": {
+    "analytics": "2b68b614-9476-47b8-a31c-8c311c8ee002"
+  }
 }
