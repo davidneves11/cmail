@@ -48,7 +48,7 @@
                         <span class="mdl-textfield__error" *ngIf="formCadastro.get('avatar').hasError('required')">
                                     Informar uma url com um	avatar é obrigatório!
                         </span>
-                        <span class="mdl-textfield__error	mdl-textfield__checking" *ngIf="formCadastro.get('avatar').status === 'PENDING'">
+                        <span class="mdl-textfield__error mdl-textfield__checking" *ngIf="formCadastro.get('avatar').status === 'PENDING'">
                                     Validação pendente....
                         </span>
                         <span class="mdl-textfield__error mdl-textfield__valid"	*ngIf="formCadastro.get('avatar').status === 'VALID'">
@@ -65,6 +65,12 @@
                             Cadastrar
                         </button>
                     </div>
+
+                    <ul	*ngIf="mensagensErro" class="mdl-textfield	is-invalid">
+                        <li	*ngFor="let	erro	of	mensagensErro" class="mdl-textfield__error">
+                            {{erro.message}}:	{{erro.value}}
+                        </li>
+                    </ul>
                 </form>
             </div>
         </div>

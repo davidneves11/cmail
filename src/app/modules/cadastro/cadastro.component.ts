@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { HttpClient, HttpResponseBase	}	from '@angular/common/http';
+import { HttpClient, HttpResponseBase, HttpErrorResponse	}	from '@angular/common/http';
 import { map, catchError } from	"rxjs/operators";
+import { User } from 'src/app/models/user';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-cadastro',
@@ -17,21 +19,35 @@ export class CadastroComponent implements OnInit {
     telefone:	new	FormControl('',	[Validators.required,	Validators.pattern('[0-9]{4}-?[0-9]{4}[0-9]?')]),
     avatar:	new	FormControl('',[Validators.required],	this.validaImagem.bind(this))
   })
+  mensagensErro: any;
   
-  
-  constructor (private	httpClient:	HttpClient) { }
+  constructor(private	httpClient:	HttpClient
+        ,private	roteador:	Router){}
 
   ngOnInit(): void {
   }
 
-  handleCadastrarUsuario()	{
-    if(this.formCadastro.valid){
-			console.log(this.formCadastro.value);
-			this.formCadastro.reset();
+  handleCadastrarUsuario() {
+    if (this.formCadastro.valid) {
+          const	userData = new User(this.formCadastro.value);
+          this.httpClient
+                  .post('http://localhost:3200/users',userData)
+                  .subscribe(
+                      (response) =>	{
+                          console.log(`Cadastrado	com	sucesso`);
+                          this.formCadastro.reset()
+                          setTimeout(()	=> {
+                              this.roteador.navigate(['']);
+                          }, 1000);
+                      }
+                      ,(responseError: HttpErrorResponse)	=>	{
+                          //resposta caso	existam	erros!
+                          this.mensagensErro = responseError.error.body
+                      }
+                  )
     } else {
           this.validarTodosOsCamposDoFormulario(this.formCadastro);
     }
-
   }
 
   validarTodosOsCamposDoFormulario(form:	FormGroup)	{
@@ -44,14 +60,14 @@ export class CadastroComponent implements OnInit {
 	validaImagem(campoDoFormulario:	FormControl)	{
     return this.httpClient
                       .head(campoDoFormulario.value,	{
-                          observe:	'response'
+                          observe: 'response'
                       })
                       .pipe(map((response:	HttpResponseBase)	=>	{
-                              return	response.ok	?	null	:	{	urlInvalida:	true	}
+                              return response.ok ? null : {	urlInvalida: true	}
                           }),
-                          catchError((error)	=>	{
-                              return	[{	urlInvalida:	true	}]
+                          catchError((error) =>	{
+                              return [{	urlInvalida: true	}]
                           })
                       )
-    }
+  }
 }
