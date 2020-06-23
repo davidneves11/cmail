@@ -1,8 +1,10 @@
 import { NgModule }	from '@angular/core';
 import { LoginRoutingModule } from './login-routing.module';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoginComponent } from './login.component';
+import { HttpClientModule } from '@angular/common/http';
+import { SharedComponentModule } from 'src/app/components/shared-components.module';
 
 @NgModule({
 	declarations: [
@@ -11,7 +13,10 @@ import { LoginComponent } from './login.component';
 	imports: [
 		CommonModule,
 		FormsModule,
-		LoginRoutingModule
+		LoginRoutingModule,
+		HttpClientModule,
+		ReactiveFormsModule,
+		SharedComponentModule,
 	]
 })
 
